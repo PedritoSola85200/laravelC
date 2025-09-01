@@ -5,7 +5,7 @@ use Livewire\Volt\Volt;
 
 Route::get('/', function () {
     return view('welcome');
-})->name('home');
+})->name('home'); 
 
 
 Route::middleware(['auth'])->group(function () {
