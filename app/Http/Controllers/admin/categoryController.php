@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\category;
 use Illuminate\Http\Request;
+use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
 
 class categoryController extends Controller
@@ -54,7 +55,9 @@ class categoryController extends Controller
      */
     public function edit(category $category)
     {
-        //
+
+
+        return view('admin.categories.edit', ['category' => $category]);
     }
 
     /**
@@ -62,7 +65,18 @@ class categoryController extends Controller
      */
     public function update(Request $request, category $category)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|string|max:255|unique:categories,name,' . $category->id
+        ]);
+
+        $category->update($data);
+
+        session()->flash('swal', [
+            'icon' => 'success',
+            'title' => 'Categoria actualizada',
+            'text' => 'La categoria fue actualizada correctamente'
+        ]);
+        return redirect()->route('admin.categories.edit', $category);
     }
 
     /**
@@ -70,6 +84,16 @@ class categoryController extends Controller
      */
     public function destroy(category $category)
     {
-        //
-    }
+
+       $category->delete();
+
+      session()->flash('swal', [
+        'icon' => 'success',
+        'Title' => 'Categoria Eliminada',
+        'text' => 'La categoria fue eliminada exitosamente'
+      ]);
+
+      return redirect()->route('admin.categories.index');
+    
+}
 }

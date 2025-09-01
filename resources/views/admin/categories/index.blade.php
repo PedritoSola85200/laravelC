@@ -40,10 +40,19 @@
                     {{$category->name}}
                 </td>
                 <td class="px-6 py-4">
-                    <button type="button" class="text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Edit</button>
-
+                    <div class="flex items-center space-x-2">
+                        <a href="{{route("admin.categories.edit", $category)}}"class="btn-edit">Editar</a>
+                        
+                        <form action="{{route('admin.categories.destroy', $category)}}" method="post">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn-delete">Eliminar</button>
+                        </form>
+                    </div>
+                    
                 </td>
 
+        
             </tr>
             @endforeach
 
