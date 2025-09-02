@@ -1,12 +1,13 @@
+
 <x-layouts.admin>
 
     <div class="flex justify-between items-center mb-8">
     <flux:breadcrumbs >
     <flux:breadcrumbs.item href="{{route('admin.dashboard')}}">Dashboard</flux:breadcrumbs.item>
-    <flux:breadcrumbs.item>Categories</flux:breadcrumbs.item>
+    <flux:breadcrumbs.item>Posts</flux:breadcrumbs.item>
     </flux:breadcrumbs>
 
-    <a href="{{route('admin.categories.create')}}" class="btn btn-blue">Nuevo</a>
+    <a href="{{route('admin.posts.create')}}" class="btn btn-blue">Nuevo</a>
     </div>
     
 
@@ -21,7 +22,7 @@
                     ID
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    Name
+                    Titulo
                 </th>
                 <th scope="col" class="px-6 py-3">
                     Edit
@@ -31,30 +32,33 @@
         <tbody>
 
 
-            @foreach ($categories as $category)
+            @foreach ($posts as $post)
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    {{$category->id}}
+                    {{$post->id}}
                 </th>
                 <td class="px-6 py-4">
-                    {{$category->name}}
+                    {{$post->title}}
                 </td>
                 <td class="px-6 py-4">
-                    <div class="flex items-center space-x-2">
-                        <a href="{{route("admin.categories.edit", $category)}}"class="btn-edit">Editar</a>
+                     <div class="flex items-center space-x-2">
+                        <a href="{{route("admin.posts.edit", $post)}}"class="btn-edit">Editar</a>
                         
-                        <form class="delete-form" action="{{route('admin.categories.destroy', $category)}}" method="post">
+                        <form class="delete-form" action="{{route('admin.posts.destroy', $post)}}" method="post">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn-delete">Eliminar</button>
                         </form>
-                    </div>
+                    </div> 
                 </td>
 
             </tr>
             @endforeach
         </tbody>
     </table>
+</div>
+<div class="mt-4">
+    {{$posts->links()}}
 </div>
 
 @push('js')
@@ -66,7 +70,7 @@
 
             Swal.fire({
   title: "Estas seguro?",
-  text: "Deseas eliminar esta categoria?",
+  text: "Deseas eliminar este Post?",
   icon: "warning",
   showCancelButton: true,
   confirmButtonColor: "#3085d6",
