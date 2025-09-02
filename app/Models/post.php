@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use PhpParser\Node\Expr\FuncCall;
 
 class post extends Model
 {
+    use HasFactory;
+    
     protected $fillable = [
         'title', 'slug', 'image_path', 'excerpt', 'concept', 'is_published',
         'published_at', 'user_id', 'category_id' ];

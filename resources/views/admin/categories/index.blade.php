@@ -43,23 +43,44 @@
                     <div class="flex items-center space-x-2">
                         <a href="{{route("admin.categories.edit", $category)}}"class="btn-edit">Editar</a>
                         
-                        <form action="{{route('admin.categories.destroy', $category)}}" method="post">
+                        <form class="delete-form" action="{{route('admin.categories.destroy', $category)}}" method="post">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn-delete">Eliminar</button>
                         </form>
                     </div>
-                    
                 </td>
 
-        
             </tr>
             @endforeach
-
-
-
         </tbody>
     </table>
 </div>
 
+@push('js')
+
+<script>
+    document.querySelectorAll('.delete-form').forEach(form=>{
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            Swal.fire({
+  title: "Estas seguro?",
+  text: "Deseas eliminar esta ctegoria?",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#d33",
+  confirmButtonText: "Si, eliminarlo",
+  cancelButtonText: "Cancelar"
+}).then((result) => {
+  if (result.isConfirmed) {
+form.submit();
+  }
+});
+        });
+    })
+</script>
+    
+@endpush
 </x-layouts.admin>
