@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Observers\postObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use PhpParser\Node\Expr\FuncCall;
 
+#[ObservedBy(postObserver::class)]
 class post extends Model
 {
     use HasFactory;

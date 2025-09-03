@@ -11,7 +11,7 @@
         <form action="{{route('admin.posts.update', $post)}}" class="bg-black px-6 py-8 rounded-lg shadow-lg space-y-4" method="POST">
             @csrf
             @method('PUT')
-            <flux:input label="Title" name="tilte" value="{{old('title', $post->title)}}"/>
+            <flux:input label="Title" name="title" value="{{old('title', $post->title)}}"/>
             <flux:input label="Slug" name="slug" value="{{old('slug', $post->slug)}}"/>
             <flux:select name="category_id" placeholder="Selecionar Categoria">
             @foreach ($categories as $category)
@@ -22,17 +22,17 @@
             </flux:select>
 
             <flux:textarea label="Resumen" name="excerpt"> {{ old('excerpt', $post->excerpt) }} </flux:textarea>
-            <flux:textarea label="Cuerpo" rows="16" name="content"> {{ old('concept', $post->concept) }} </flux:textarea>
+            <flux:textarea label="Cuerpo" rows="16" name="concept"> {{ old('concept', $post->concept) }} </flux:textarea>
             <div>
                 <p class="text-sm font-semibold">Estado</p>
 
                 <label >
-                <input type="checkbox" name="is_published" value="0" @checked(old('is_published',$post->is_published) == 0) >
+                <input type="radio" name="is_published" value="0" @checked(old('is_published',$post->is_published) == 0) >
                 No publicado
                 </label>
 
                 <label >
-                <input type="checkbox" name="is_published" value="1" @checked(old('is_published',$post->is_published) == 1)>
+                <input type="radio" name="is_published" value="1" @checked(old('is_published',$post->is_published) == 1)>
                 publicado
                 </label>
 

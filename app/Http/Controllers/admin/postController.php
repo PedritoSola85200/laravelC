@@ -17,7 +17,7 @@ class postController extends Controller
     public function index()
     {
 
-        $posts = post::paginate();
+        $posts = post::latest('id')->paginate();
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -49,7 +49,7 @@ class postController extends Controller
         title' => 'Post creado', 
         'text' => 'Post creado existosamente']);
         
-      $data['user_id'] = auth()->id();
+      $data['user_id'] = auth('web')->id();
       $post = post::create($data);
 
         return redirect()->route('admin.posts.edit',compact('post') );
@@ -81,19 +81,23 @@ class postController extends Controller
     {
             $data = $request->validate([
             "title" => 'required|string|max:255',
-            "slug" => 'required|string|max:255|unique:posts,slug',
+            "slug" => 'required|string|max:255|unique:posts,slug,' . $post->id,
             'category_id' => 'required|exists:categories,id',
-            
+            'excerpt' => 'required_if:is_published,1|max:255',
+            'concept' => 'required_if:is_published,1',
+            'is_published' => 'boolean'
 
         ]);
 
-        session()->flash('swal', [
+        $post->update($data);
+
+         session()->flash('swal', [
             'icon' => 'success',
             'title' => 'Post actualizado',
             'text' => 'Post actualizado correctamente'
-        ]);
+        ]); 
 
-        return /* redirect()->route('admin.posts.edit', $post) */ $request;
+        return  redirect()->route('admin.posts.edit', $post) ;
     }
 
     /**
