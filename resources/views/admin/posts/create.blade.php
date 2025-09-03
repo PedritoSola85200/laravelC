@@ -7,7 +7,7 @@
 
     <div>
 
-        <form action="{{route('admin.posts.store')}}" class="bg-black px-6 py-8 rounded-lg shadow-lg space-y-4" method="POST">
+        <form action="{{route('admin.posts.store')}}" class="bg-white px-6 py-8 rounded-lg shadow-lg space-y-4" method="POST">
             @csrf
 
             <flux:input label="Titulo" name="title" id="title" value="{{old('title')}}" oninput="string_to_slug(this.value, '#slug')"/>

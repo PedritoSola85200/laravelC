@@ -1,18 +1,35 @@
 <x-layouts.admin>
 
+    @push('css')
+       <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" /> 
+       <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    @endpush
     <flux:breadcrumbs class="mb-8" >
     <flux:breadcrumbs.item href="{{route('admin.dashboard')}}">Dashboard</flux:breadcrumbs.item>
     <flux:breadcrumbs.item href="{{route('admin.posts.index')}}" >posts</flux:breadcrumbs.item>
     <flux:breadcrumbs.item>Editar</flux:breadcrumbs.item>
     </flux:breadcrumbs>
 
-    <div>
+    <div class="relative mb-5">
+        <input type="image" id="imgPreview" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1200px-No-Image-Placeholder.svg.png" alt="" class="w-full aspect-video  object-center">
+        <div class="absolute top-8 right-8">
+        <label class="bg-white px-4 py-2 rounded-lg cursor-pointer">
+            Cambiar Imagen
+        <input hidden type="file" name="image" accept="image/*" onchange="previewImage(event, '#imgPreview')" >
+        </label>
+        </div>
+    </div>
 
-        <form action="{{route('admin.posts.update', $post)}}" class="bg-black px-6 py-8 rounded-lg shadow-lg space-y-4" method="POST">
+    <div class="bg-white px-4 py-8 rounded-lg shadow-lg space-y-4">
+
+        <form action="{{route('admin.posts.update', $post)}}"  method="POST" id="">
             @csrf
             @method('PUT')
+            <div>
             <flux:input label="Title" name="title" value="{{old('title', $post->title)}}"/>
             <flux:input label="Slug" name="slug" value="{{old('slug', $post->slug)}}"/>
+            <label for="">Categoria</label>
             <flux:select name="category_id" placeholder="Selecionar Categoria">
             @foreach ($categories as $category)
             <flux:select.option value="{{ $category->id}}" :selected="$category->id == old('category_id', $post->category_id)">
@@ -22,7 +39,24 @@
             </flux:select>
 
             <flux:textarea label="Resumen" name="excerpt"> {{ old('excerpt', $post->excerpt) }} </flux:textarea>
-            <flux:textarea label="Cuerpo" rows="16" name="concept"> {{ old('concept', $post->concept) }} </flux:textarea>
+            <p class="font-medium text-sm m-2">Etiquetas</p>
+            <select id="tags" name="tags[]" style="width: 100%" multiple="multiple">
+                
+            <option value="1">Etiqueta 1</option>
+            <option value="2">Etiqueta 2</option>
+            <option value="3">Etiqueta 3</option>
+
+            </select>
+            <div>
+                <p class="font-medium text-sm m-2">Cuerpo</p>
+                <div id="editor">
+                <p>{!! old('concept', $post->concept) !!}</p>
+            </div>
+            <textarea hidden name="concept" id="concept">
+                {{ old('concept', $post->concept) }}
+            </textarea>
+            </div>
+
             <div>
                 <p class="text-sm font-semibold">Estado</p>
 
@@ -37,9 +71,37 @@
                 </label>
 
             </div>
-            <button type="submit"  class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Editar</button>
+            <button type="submit"  class="btn-edit">Editar</button>
+            <button type="button"  class="btn-delete" onclick="deleteForm()">Eliminar</button>
+            </div>
+        </form>
+
+        <form action="{{route('admin.posts.destroy', $post)}}" method="post" id="form">
+            @csrf
+            @method('DELETE')
         </form>
 
     </div>
+@push('js')
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+<script>
+          const quill = new Quill('#editor', {
+    theme: 'snow'
+  });
 
+  quill.on('text-change', function(){
+    document.querySelector('#concept').value = quill.root.innerHTML;
+  })
+</script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+    $('#tags').select2();
+});
+</script>
+
+@endpush
 </x-layouts.admin>

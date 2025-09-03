@@ -43,12 +43,6 @@
                 <td class="px-6 py-4">
                      <div class="flex items-center space-x-2">
                         <a href="{{route("admin.posts.edit", $post)}}"class="btn-edit">Editar</a>
-                        
-                        <form class="delete-form" action="{{route('admin.posts.destroy', $post)}}" method="post">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn-delete">Eliminar</button>
-                        </form>
                     </div> 
                 </td>
 

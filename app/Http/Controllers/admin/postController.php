@@ -43,16 +43,20 @@ class postController extends Controller
 
         ]);
 
-        session()->flash('swal', 
-        [
-        'icon' => 'success', '
-        title' => 'Post creado', 
-        'text' => 'Post creado existosamente']);
-        
-      $data['user_id'] = auth('web')->id();
-      $post = post::create($data);
+        session()->flash(
+            'swal',
+            [
+                'icon' => 'success',
+                '
+        title' => 'Post creado',
+                'text' => 'Post creado existosamente'
+            ]
+        );
 
-        return redirect()->route('admin.posts.edit',compact('post') );
+        $data['user_id'] = auth('web')->id();
+        $post = post::create($data);
+
+        return redirect()->route('admin.posts.edit', compact('post'));
     }
 
     /**
@@ -68,9 +72,9 @@ class postController extends Controller
      */
     public function edit(post $post)
     {
-        
+
         $categories = category::all();
-       
+
         return view('admin.posts.edit', ['post' => $post, 'categories' => $categories]);
     }
 
@@ -79,7 +83,7 @@ class postController extends Controller
      */
     public function update(Request $request, post $post)
     {
-            $data = $request->validate([
+        $data = $request->validate([
             "title" => 'required|string|max:255',
             "slug" => 'required|string|max:255|unique:posts,slug,' . $post->id,
             'category_id' => 'required|exists:categories,id',
@@ -91,13 +95,13 @@ class postController extends Controller
 
         $post->update($data);
 
-         session()->flash('swal', [
+        session()->flash('swal', [
             'icon' => 'success',
             'title' => 'Post actualizado',
             'text' => 'Post actualizado correctamente'
-        ]); 
+        ]);
 
-        return  redirect()->route('admin.posts.edit', $post) ;
+        return  redirect()->route('admin.posts.edit', $post);
     }
 
     /**
@@ -105,6 +109,14 @@ class postController extends Controller
      */
     public function destroy(post $post)
     {
-        //
+        $post->delete();
+
+        session()->flash('swal', [
+            'icon' => 'success',
+            'title' => 'Post eliminado',
+            'text' => 'Post eliminado correctamente'
+        ]);
+
+        return redirect()->route('admin.posts.index');
     }
 }
