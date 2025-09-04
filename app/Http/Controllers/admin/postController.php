@@ -5,6 +5,8 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\category;
 use App\Models\post;
+use App\Models\tag as tags;
+use Illuminate\Container\Attributes\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use PhpParser\Node\Expr\AssignOp\Concat;
@@ -74,8 +76,9 @@ class postController extends Controller
     {
 
         $categories = category::all();
+        $tags = tags::all();
 
-        return view('admin.posts.edit', ['post' => $post, 'categories' => $categories]);
+        return view('admin.posts.edit', ['post' => $post, 'categories' => $categories, 'tags' => $tags]);
     }
 
     /**
@@ -94,6 +97,14 @@ class postController extends Controller
         ]);
 
         $post->update($data);
+
+        $tags = [];
+
+        foreach($request->tags ?? [] as $tag){
+          $tags[] = tags::firstOrCreate(['name' => $tag]);
+        }
+
+       $post->tags()->sync($tags);
 
         session()->flash('swal', [
             'icon' => 'success',

@@ -41,10 +41,11 @@
             <flux:textarea label="Resumen" name="excerpt"> {{ old('excerpt', $post->excerpt) }} </flux:textarea>
             <p class="font-medium text-sm m-2">Etiquetas</p>
             <select id="tags" name="tags[]" style="width: 100%" multiple="multiple">
-                
-            <option value="1">Etiqueta 1</option>
-            <option value="2">Etiqueta 2</option>
-            <option value="3">Etiqueta 3</option>
+                @foreach ($tags  as $tag)    
+                <option value="{{$tag->name}}" @selected(in_array($tag->name,old('tags',$post->tags->pluck('name')->toArray())))>
+                    {{$tag->name}}
+                </option>
+                @endforeach
 
             </select>
             <div>
@@ -99,7 +100,11 @@
 
 <script>
     $(document).ready(function() {
-    $('#tags').select2();
+    $('#tags').select2({
+        tags:true,
+        tokenSeparators: [','],
+        
+    });
 });
 </script>
 
