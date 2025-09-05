@@ -12,7 +12,7 @@
     </flux:breadcrumbs>
 
     <div class="relative mb-5">
-        <input type="image" id="imgPreview" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1200px-No-Image-Placeholder.svg.png" alt="" class="w-full aspect-video  object-center">
+        <input type="image" id="imgPreview" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1200px-No-Image-Placeholder.svg.png" alt="" class="w-full aspect-video  object-center object-cover">
         <div class="absolute top-8 right-8">
         <label class="bg-white px-4 py-2 rounded-lg cursor-pointer">
             Cambiar Imagen
@@ -28,7 +28,9 @@
             @method('PUT')
             <div>
             <flux:input label="Title" name="title" value="{{old('title', $post->title)}}"/>
+            @if (!$post->is_published)    
             <flux:input label="Slug" name="slug" value="{{old('slug', $post->slug)}}"/>
+            @endif
             <label for="">Categoria</label>
             <flux:select name="category_id" placeholder="Selecionar Categoria">
             @foreach ($categories as $category)
@@ -72,7 +74,7 @@
                 </label>
 
             </div>
-            <button type="submit"  class="btn-edit">Editar</button>
+            <button type="submit"  class="btn-edit">Guardar</button>
             <button type="button"  class="btn-delete" onclick="deleteForm()">Eliminar</button>
             </div>
         </form>

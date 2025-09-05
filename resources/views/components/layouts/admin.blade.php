@@ -152,6 +152,22 @@
         </script>    
         @endif
 
+        @if ($errors->any())
+            <script>
+                swal.fire({
+
+                    icon:'error',
+                    title: 'Oopss...',
+                    html:`<ul>
+                        @foreach ($errors->all() as $error )
+                        <li>{{$error}}</li>
+                        @endforeach
+                        </ul>`
+
+                })
+            </script>
+        @endif
+
         @stack('js')
 
     </body>

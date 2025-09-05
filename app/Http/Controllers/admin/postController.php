@@ -88,7 +88,13 @@ class postController extends Controller
     {
         $data = $request->validate([
             "title" => 'required|string|max:255',
-            "slug" => 'required|string|max:255|unique:posts,slug,' . $post->id,
+            "slug" => [
+                Rule::requiredIf(function() use ($post){
+                    return !$post->published_at;
+                }),
+                'string', 'max:255', 'unique:posts,slug,' . $post->id
+            ],
+            /* "slug" => 'required|string|max:255|unique:posts,slug,' . $post->id, */
             'category_id' => 'required|exists:categories,id',
             'excerpt' => 'required_if:is_published,1|max:255',
             'concept' => 'required_if:is_published,1',
