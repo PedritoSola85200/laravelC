@@ -11,21 +11,26 @@
     <flux:breadcrumbs.item>Editar</flux:breadcrumbs.item>
     </flux:breadcrumbs>
 
-    <div class="relative mb-5">
-        <input type="image" id="imgPreview" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1200px-No-Image-Placeholder.svg.png" alt="" class="w-full aspect-video  object-center object-cover">
+    <div class="bg-white px-4 py-8 rounded-lg shadow-lg space-y-4">
+
+        <form action="{{route('admin.posts.update', $post)}}"  method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+
+        <div class="relative mb-5">
+        <img  id="imgPreview"   src=" {{ $post->image_path  ?  Storage::url($post->image_path) : 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1200px-No-Image-Placeholder.svg.png'}}" alt="" class="w-full aspect-video  object-center object-cover">
         <div class="absolute top-8 right-8">
         <label class="bg-white px-4 py-2 rounded-lg cursor-pointer">
             Cambiar Imagen
         <input hidden type="file" name="image" accept="image/*" onchange="previewImage(event, '#imgPreview')" >
         </label>
+
+        <div class="bg-white mt-6 px-3.5 rounded-lg ">
+            <a href="">Descargar Imagen</a>
+        </div>
+
         </div>
     </div>
-
-    <div class="bg-white px-4 py-8 rounded-lg shadow-lg space-y-4">
-
-        <form action="{{route('admin.posts.update', $post)}}"  method="POST" id="">
-            @csrf
-            @method('PUT')
             <div>
             <flux:input label="Title" name="title" value="{{old('title', $post->title)}}"/>
             @if (!$post->is_published)    

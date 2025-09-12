@@ -8,6 +8,7 @@ use App\Models\post;
 use App\Models\tag as tags;
 use Illuminate\Container\Attributes\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use PhpParser\Node\Expr\AssignOp\Concat;
 
@@ -89,28 +90,48 @@ class postController extends Controller
         $data = $request->validate([
             "title" => 'required|string|max:255',
             "slug" => [
-                Rule::requiredIf(function() use ($post){
+                Rule::requiredIf(function () use ($post) {
                     return !$post->published_at;
                 }),
-                'string', 'max:255', 'unique:posts,slug,' . $post->id
+                'string',
+                'max:255',
+                'unique:posts,slug,' . $post->id
             ],
             /* "slug" => 'required|string|max:255|unique:posts,slug,' . $post->id, */
             'category_id' => 'required|exists:categories,id',
+            'image' => 'nullable|image',
             'excerpt' => 'required_if:is_published,1|max:255',
             'concept' => 'required_if:is_published,1',
             'is_published' => 'boolean'
 
         ]);
 
+        if ($request->hasFile('image')) {
+
+            if ($post->image_path) {
+                Storage::delete($post->image_path);
+            }
+
+            $extension = $request->image->extension();
+            $nameFile = $post->slug . '.' . $extension;
+
+            while(Storage::exists('posts/' . $nameFile)){
+
+                $nameFile = str_replace('.' . $extension, '-copia.' . $extension, $nameFile);
+            }
+            $data['image_path'] = Storage::putFileAs('posts', $request->image, $nameFile);
+        }
+
+
         $post->update($data);
 
         $tags = [];
 
-        foreach($request->tags ?? [] as $tag){
-          $tags[] = tags::firstOrCreate(['name' => $tag]);
+        foreach ($request->tags ?? [] as $tag) {
+            $tags[] = tags::firstOrCreate(['name' => $tag]);
         }
 
-       $post->tags()->sync($tags);
+        $post->tags()->sync($tags);
 
         session()->flash('swal', [
             'icon' => 'success',
