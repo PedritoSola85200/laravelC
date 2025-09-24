@@ -1,4 +1,4 @@
-<x-layouts.admin>
+ <x-layouts.admin>
 
     @push('css')
        <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" /> 
@@ -26,9 +26,8 @@
         </label>
 
         <div class="bg-white mt-6 px-3.5 rounded-lg ">
-            <a href="">Descargar Imagen</a>
+            <a href="{{route("prueba", $post)}}">Descargar Imagen</a>
         </div>
-
         </div>
     </div>
             <div>

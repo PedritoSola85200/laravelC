@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Events\uploadedImage;
 use App\Http\Controllers\Controller;
+use App\Jobs\resizeImage;
 use App\Models\category;
 use App\Models\post;
 use App\Models\tag as tags;
@@ -11,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use PhpParser\Node\Expr\AssignOp\Concat;
+
 
 class postController extends Controller
 {
@@ -112,6 +115,7 @@ class postController extends Controller
                 Storage::delete($post->image_path);
             }
 
+            
             $extension = $request->image->extension();
             $nameFile = $post->slug . '.' . $extension;
 
@@ -119,10 +123,15 @@ class postController extends Controller
 
                 $nameFile = str_replace('.' . $extension, '-copia.' . $extension, $nameFile);
             }
-            $data['image_path'] = Storage::putFileAs('posts', $request->image, $nameFile);
-        }
+                    
+            /* $data['image_path'] = Storage::putFileAs('posts', $request->image,   $nameFile); */
 
+        $data['image_path'] = Storage::putFileAs('posts' , $request->image, $nameFile ); 
 
+        //resizeImage::dispatch($data['image_path']);
+        uploadedImage::dispatch($data['image_path']);
+        } 
+        
         $post->update($data);
 
         $tags = [];
