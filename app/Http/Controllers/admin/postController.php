@@ -10,13 +10,24 @@ use App\Models\post;
 use App\Models\tag as tags;
 use Illuminate\Container\Attributes\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use PhpParser\Node\Expr\AssignOp\Concat;
 
 
-class postController extends Controller
+class postController extends Controller implements HasMiddleware
 {
+
+        public static function middleware()
+        {
+            return[
+                /* 'admin' */
+                new Middleware('admin', except: ["index", 'create'])
+            ];
+        }
+
     /**
      * Display a listing of the resource.
      */
@@ -32,7 +43,6 @@ class postController extends Controller
      */
     public function create()
     {
-
         $categories = category::all();
         return view('admin.posts.create', compact('categories'));
     }

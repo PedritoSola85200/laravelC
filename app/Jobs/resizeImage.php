@@ -28,14 +28,14 @@ class resizeImage implements ShouldQueue
      */
     public function handle(): void
     {
-        $upload = Storage::get($this->image_path);
+/*         $upload = Storage::get($this->image_path);
 
         $extension = pathinfo($this->image_path, PATHINFO_EXTENSION);
             $image = Image::read($upload)
             ->scale(width: 500)                                      
             ->encodeByExtension($extension, quality: 85);
         Storage::put($this->image_path, $image); 
-        
-        } 
+        */
+        }  
     
 }

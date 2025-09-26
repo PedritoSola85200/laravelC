@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\isAdmin;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -11,14 +12,16 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
         then: function(){
-            Route::middleware('web', 'auth')
-            ->prefix('admin')
+            Route::middleware('web', 'auth',  'can:admin' )
+             ->prefix('admin') 
             ->name('admin.')
              ->group(base_path('routes/admin.php'));
         }
     )
-    ->withMiddleware(function (Middleware $middleware) {
-        //
+     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->alias([
+            'admin' => isAdmin::class,
+        ]) ;
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
