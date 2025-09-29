@@ -1,3 +1,5 @@
+
+
 window.previewImage =  function (event, querySelector){
 
 	//Recuperamos el input que desencadeno la acción
@@ -20,9 +22,31 @@ window.previewImage =  function (event, querySelector){
                 
 }
 
-window.deleteForm = function () {
+
+
+
+	 $('.btn-delete').click(function (e) { 
+		e.preventDefault();
+ Swal.fire({
+  title: "Estas seguro?",
+  text: "Desea eliminar este post?",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#d33",
+  confirmButtonText: "Eliminar",
+  cancelButtonText:"Cancelar"
+}).then((result) => {
+  if (result.isConfirmed) {
+	const form = document.getElementById('DeleteForm');
+	form.submit();
+  }
+}); 
+
+	});
+/* window.deleteForm = function () {
 
 let from = document.getElementById('form');
 form.submit();
 
-  }
+  } */

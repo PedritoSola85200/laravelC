@@ -5,16 +5,22 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
 
 class categoryController extends Controller
 {
+
+    
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+
+        
+        Gate::authorize('admin');
        $categories =  category::orderBy('id', 'desc')->get();
         return view('admin.categories.index', compact('categories')); 
         

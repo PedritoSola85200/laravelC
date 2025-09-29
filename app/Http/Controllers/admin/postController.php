@@ -17,23 +17,24 @@ use Illuminate\Validation\Rule;
 use PhpParser\Node\Expr\AssignOp\Concat;
 
 
-class postController extends Controller implements HasMiddleware
+class postController extends Controller /* implements HasMiddleware */
 {
 
-        public static function middleware()
+/*         public static function middleware()
         {
             return[
-                /* 'admin' */
+                 'admin'
                 new Middleware('admin', except: ["index", 'create'])
             ];
         }
-
+ */
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
 
+        
         $posts = post::latest('id')->paginate();
         return view('admin.posts.index', compact('posts'));
     }

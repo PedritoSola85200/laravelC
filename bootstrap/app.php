@@ -12,17 +12,17 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
         then: function(){
-            Route::middleware('web', 'auth',  'can:admin' )
+            Route::middleware('web', 'auth' /* ,  'hola' */ )
              ->prefix('admin') 
             ->name('admin.')
              ->group(base_path('routes/admin.php'));
         }
     )
-     ->withMiddleware(function (Middleware $middleware) {
+      ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            'admin' => isAdmin::class,
+          //  'hola' => isAdmin::class,
         ]) ;
-    })
+    }) 
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

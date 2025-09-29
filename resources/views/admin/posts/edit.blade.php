@@ -79,11 +79,11 @@
 
             </div>
             <button type="submit"  class="btn-edit">Guardar</button>
-            <button type="button"  class="btn-delete" onclick="deleteForm()">Eliminar</button>
+            <button type="button"  class="btn-delete">Eliminar</button>
             </div>
         </form>
 
-        <form action="{{route('admin.posts.destroy', $post)}}" method="post" id="form">
+        <form action="{{route('admin.posts.destroy', $post)}}" method="post" id="DeleteForm">
             @csrf
             @method('DELETE')
         </form>
@@ -111,6 +111,7 @@
         tokenSeparators: [','],
         
     });
+
 });
 </script>
 
